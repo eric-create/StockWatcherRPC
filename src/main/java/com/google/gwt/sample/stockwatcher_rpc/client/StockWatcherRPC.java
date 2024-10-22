@@ -24,8 +24,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class StockWatcherRPC implements EntryPoint
-{
+public class StockWatcherRPC implements EntryPoint {
 	private static final int REFRESH_INTERVAL = 5000; // ms
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable stocksFlexTable = new FlexTable();
@@ -43,8 +42,7 @@ public class StockWatcherRPC implements EntryPoint
 	/**
 	 * Entry point method.
 	 */
-	public void onModuleLoad()
-	{
+	public void onModuleLoad() {
 		// Create table for stock data.
 		stocksFlexTable.setText(0, 0, "Symbol");
 		stocksFlexTable.setText(0, 1, "Price");
@@ -84,13 +82,10 @@ public class StockWatcherRPC implements EntryPoint
 		newSymbolTextBox.setFocus(true);
 
 		// Setup timer to refresh list automatically.
-		Timer refreshTimer = new Timer()
-		{
+		Timer refreshTimer = new Timer() {
 			@Override
-			public void run()
-			{
-				if (!stocks.isEmpty())
-				{
+			public void run() {
+				if (!stocks.isEmpty()) {
 					refreshWatchList();
 				}
 			}
@@ -98,20 +93,16 @@ public class StockWatcherRPC implements EntryPoint
 		refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
 
 		// Listen for mouse events on the Add button.
-		addStockButton.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event)
-			{
+		addStockButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				addStock();
 			}
 		});
 
-		randomizeButton.addClickHandler(new ClickHandler()
-		{
+		randomizeButton.addClickHandler(new ClickHandler() {
 
 			@Override
-			public void onClick(ClickEvent event)
-			{
+			public void onClick(ClickEvent event) {
 				randomizeNumber();
 
 			}
@@ -119,12 +110,9 @@ public class StockWatcherRPC implements EntryPoint
 		});
 
 		// Listen for keyboard events in the input box.
-		newSymbolTextBox.addKeyPressHandler(new KeyPressHandler()
-		{
-			public void onKeyPress(KeyPressEvent event)
-			{
-				if (event.getCharCode() == KeyCodes.KEY_ENTER)
-				{
+		newSymbolTextBox.addKeyPressHandler(new KeyPressHandler() {
+			public void onKeyPress(KeyPressEvent event) {
+				if (event.getCharCode() == KeyCodes.KEY_ENTER) {
 					addStock();
 				}
 			}
@@ -132,21 +120,17 @@ public class StockWatcherRPC implements EntryPoint
 
 	}
 
-	private void randomizeNumber()
-	{
-		this.randomizeSvc.getRandomNumber(new AsyncCallback<Integer>()
-		{
+	private void randomizeNumber() {
+		this.randomizeSvc.getRandomNumber(new AsyncCallback<Integer>() {
 
 			@Override
-			public void onFailure(Throwable caught)
-			{
+			public void onFailure(Throwable caught) {
 				randomizeLabel.setText(caught.getMessage());
 				randomizeLabel.setVisible(true);
 			}
 
 			@Override
-			public void onSuccess(Integer result)
-			{
+			public void onSuccess(Integer result) {
 				randomizeLabel.setText(result.toString());
 				randomizeLabel.setVisible(true);
 			}
@@ -155,16 +139,15 @@ public class StockWatcherRPC implements EntryPoint
 	}
 
 	/**
-	 * Add stock to FlexTable. Executed when the user clicks the addStockButton or presses enter in the newSymbolTextBox.
+	 * Add stock to FlexTable. Executed when the user clicks the addStockButton or
+	 * presses enter in the newSymbolTextBox.
 	 */
-	private void addStock()
-	{
+	private void addStock() {
 		final String symbol = newSymbolTextBox.getText().toUpperCase().trim();
 		newSymbolTextBox.setFocus(true);
 
 		// Stock code must be between 1 and 10 chars that are numbers, letters, or dots.
-		if (!symbol.matches("^[0-9a-zA-Z\\.]{1,10}$"))
-		{
+		if (!symbol.matches("^[0-9a-zA-Z\\.]{1,10}$")) {
 			Window.alert("'" + symbol + "' is not a valid symbol.");
 			newSymbolTextBox.selectAll();
 			return;
@@ -188,10 +171,8 @@ public class StockWatcherRPC implements EntryPoint
 		// Add a button to remove this stock from the table.
 		Button removeStockButton = new Button("x");
 		removeStockButton.addStyleDependentName("remove");
-		removeStockButton.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event)
-			{
+		removeStockButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				int removedIndex = stocks.indexOf(symbol);
 				stocks.remove(removedIndex);
 				stocksFlexTable.removeRow(removedIndex + 1);
@@ -207,19 +188,15 @@ public class StockWatcherRPC implements EntryPoint
 	/**
 	 * Generate random stock prices.
 	 */
-	private void refreshWatchList()
-	{
+	private void refreshWatchList() {
 		// Set up the callback object.
-		AsyncCallback<StockPrice[]> callback = new AsyncCallback<StockPrice[]>()
-		{
-			public void onFailure(Throwable caught)
-			{
+		AsyncCallback<StockPrice[]> callback = new AsyncCallback<StockPrice[]>() {
+			public void onFailure(Throwable caught) {
 				errorMsgLabel.setText("Error: " + caught.getMessage());
 				errorMsgLabel.setVisible(true);
 			}
 
-			public void onSuccess(StockPrice[] result)
-			{
+			public void onSuccess(StockPrice[] result) {
 				updateTable(result);
 
 				// Clear any errors.
@@ -233,14 +210,12 @@ public class StockWatcherRPC implements EntryPoint
 
 	/**
 	 * Update the Price and Change fields all the rows in the stock table.
-	 * 
+	 *
 	 * @param prices
-	 *            Stock data for all rows.
+	 *               Stock data for all rows.
 	 */
-	private void updateTable(StockPrice[] prices)
-	{
-		for (int i = 0; i < prices.length; i++)
-		{
+	private void updateTable(StockPrice[] prices) {
+		for (int i = 0; i < prices.length; i++) {
 			updateTable(prices[i]);
 		}
 
@@ -251,15 +226,13 @@ public class StockWatcherRPC implements EntryPoint
 
 	/**
 	 * Update a single row in the stock table.
-	 * 
+	 *
 	 * @param price
-	 *            Stock data for a single row.
+	 *              Stock data for a single row.
 	 */
-	private void updateTable(StockPrice price)
-	{
+	private void updateTable(StockPrice price) {
 		// Make sure the stock is still in the stock table.
-		if (!stocks.contains(price.getSymbol()))
-		{
+		if (!stocks.contains(price.getSymbol())) {
 			return;
 		}
 
@@ -278,12 +251,9 @@ public class StockWatcherRPC implements EntryPoint
 
 		// Change the color of text in the Change field based on its value.
 		String changeStyleName = "noChange";
-		if (price.getChangePercent() < -0.1f)
-		{
+		if (price.getChangePercent() < -0.1f) {
 			changeStyleName = "negativeChange";
-		}
-		else if (price.getChangePercent() > 0.1f)
-		{
+		} else if (price.getChangePercent() > 0.1f) {
 			changeStyleName = "positiveChange";
 		}
 

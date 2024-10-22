@@ -2,8 +2,7 @@ package com.google.gwt.sample.stockwatcher_rpc.client;
 
 import java.io.Serializable;
 
-public class StockPrice implements Serializable
-{
+public class StockPrice implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -11,7 +10,8 @@ public class StockPrice implements Serializable
 	private double price;
 	private double change;
 
-	public StockPrice() {}
+	public StockPrice() {
+	}
 
 	public StockPrice(String symbol, double price, double change) {
 		this.symbol = symbol;
@@ -19,38 +19,31 @@ public class StockPrice implements Serializable
 		this.change = change;
 	}
 
-	public String getSymbol()
-	{
+	public String getSymbol() {
 		return this.symbol;
 	}
 
-	public double getPrice()
-	{
+	public double getPrice() {
 		return this.price;
 	}
 
-	public double getChange()
-	{
+	public double getChange() {
 		return this.change;
 	}
 
-	public double getChangePercent()
-	{
+	public double getChangePercent() {
 		return 100.0 * this.change / this.price;
 	}
 
-	public void setSymbol(String symbol)
-	{
+	public void setSymbol(String symbol) {
 		this.symbol = symbol;
 	}
 
-	public void setPrice(double price)
-	{
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
-	public void setChange(double change)
-	{
+	public void setChange(double change) {
 		this.change = change;
 	}
 }
